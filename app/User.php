@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\model\Product;
 
 class User extends Authenticatable
 {
@@ -17,6 +18,8 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name', 'email', 'password',
+        'phone_number', 'address', 'company_name',
+        'tax_code', 'company_address'
     ];
 
     /**
@@ -36,4 +39,19 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function favorites()
+    {
+        return $this->belongsToMany(Product::class, 'favorites');
+    }
+    
+    public function scopeCustomer($query)
+    {
+        return $query->where('is_admin', 0)->where('status', 1);
+    }
+
+    public function scopeAdmins($query)
+    {
+        return $query->where('is_admin', 1)->where('status', 1);
+    }
 }

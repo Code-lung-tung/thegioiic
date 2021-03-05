@@ -20,6 +20,16 @@ class CreateUsersTable extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
+            $table->boolean('is_admin')->default(false);
+            $table->string('province_id')->references('id')->on('provinces')->nullable();
+            $table->string('district_id')->references('id')->on('districts')->nullable();
+            $table->string('ward_id')->references('id')->on('wards')->nullable();
+            $table->string('address');
+            $table->bigInteger('phone_number');
+            $table->integer('company_name')->nullable();
+            $table->integer('tax_code')->nullable();
+            $table->integer('company_address')->nullable();
+            $table->string('note')->nullable();
             $table->timestamps();
         });
     }

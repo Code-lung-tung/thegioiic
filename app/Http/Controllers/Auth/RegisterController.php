@@ -29,7 +29,13 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = RouteServiceProvider::HOME;
+    protected $redirectTo = '/';
+
+    protected function redirectTo()
+    {
+        session()->flash("success","Đăng ký thành công!");
+        return '/';
+    }
 
     /**
      * Create a new controller instance.
@@ -52,7 +58,13 @@ class RegisterController extends Controller
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'password' => ['required', 'string', 'min:6', 'confirmed'],
+            'phone-number' => ['required', 'string', 'min:10'],
+            'address' => ['required', 'string'],
+            'company_name' => ['string', 'max:255'],
+            'tax_code' => ['string', 'max:255'],
+            'company_address' => ['string', 'max:255'],
+            'g-recaptcha-response' => ['required', new \App\Rules\ValidRecaptcha]
         ]);
     }
 
@@ -68,6 +80,11 @@ class RegisterController extends Controller
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
+            'phone_number' => $data['phone-number'],
+            'address' => $data['address'],
+            'company_name' => $data['company-name'],
+            'tax_code' => $data['tax-code'],
+            'company_address' => $data['company-address']
         ]);
     }
 }
